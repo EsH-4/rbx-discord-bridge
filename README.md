@@ -1,19 +1,19 @@
 # Roblox Discord Bridge
 
-Bridge dua arah antara Roblox game dan Discord server. Player di Roblox bisa mengirim pesan ke Discord dan sebaliknya, player di Discord bisa mengirim pesan ke dalam game Roblox.
+A two-way bridge between a Roblox game and a Discord server. Players in Roblox can send messages to Discord, and players in Discord can send messages into the Roblox game.
 
-## 🎯 Fitur
+## 🎯 Features
 
-- ✅ **Roblox → Discord**: Player di game Roblox bisa mengirim pesan ke channel Discord
-- ✅ **Discord → Roblox**: Pesan dari Discord muncul di UI mini Discord di dalam game
-- ✅ **Real-time**: Polling system untuk sinkronisasi pesan
-- ✅ **UI Modern**: Interface mirip Discord di dalam Roblox
+* ✅ **Roblox → Discord**: Players in the Roblox game can send messages to a Discord channel
+* ✅ **Discord → Roblox**: Messages from Discord appear in a mini Discord UI inside the game
+* ✅ **Real-time**: Polling system for message synchronization
+* ✅ **Modern UI**: Discord-like interface inside Roblox
 
 ## 📋 Prerequisites
 
-1. **Node.js** (v16 atau lebih baru)
-2. **Discord Bot Token** - Buat bot di [Discord Developer Portal](https://discord.com/developers/applications)
-3. **Roblox Studio** - Untuk menjalankan script client
+1. **Node.js** (v16 or newer)
+2. **Discord Bot Token** – Create a bot in the [Discord Developer Portal](https://discord.com/developers/applications)
+3. **Roblox Studio** – To run the client script
 
 ## 🚀 Setup
 
@@ -25,131 +25,167 @@ npm install
 
 ### 2. Setup Discord Bot
 
-1. Pergi ke [Discord Developer Portal](https://discord.com/developers/applications)
-2. Buat aplikasi baru atau pilih yang sudah ada
-3. Pergi ke tab "Bot" dan buat bot
-4. Copy **Bot Token**
-5. Enable **Message Content Intent** di tab "Bot" (penting!)
-6. Invite bot ke server dengan permission:
-   - Send Messages
-   - Read Message History
-   - View Channels
+1. Go to the [Discord Developer Portal](https://discord.com/developers/applications)
+2. Create a new application or select an existing one
+3. Go to the **"Bot"** tab and create a bot
+4. Copy the **Bot Token**
+5. Enable **Message Content Intent** in the **Bot tab** (important!)
+6. Invite the bot to your server with the following permissions:
 
-### 3. Konfigurasi Environment
+   * Send Messages
+   * Read Message History
+   * View Channels
 
-1. Copy `.env.example` menjadi `.env`:
-   ```bash
-   copy .env.example .env
-   ```
+### 3. Configure Environment
 
-2. Edit `.env` dan isi dengan:
-   ```
-   DISCORD_TOKEN=your_discord_bot_token_here
-   CHANNEL_ID=your_discord_channel_id_here
-   PORT=3000
-   SHARED_SECRET=your_secure_secret_key_here
-   ```
+1. Copy `.env.example` to `.env`:
 
-   **Cara mendapatkan CHANNEL_ID:**
-   - Enable Developer Mode di Discord (Settings > Advanced > Developer Mode)
-   - Right-click pada channel yang ingin digunakan
-   - Pilih "Copy ID"
+```bash
+copy .env.example .env
+```
 
-### 4. Jalankan Server
+2. Edit `.env` and fill in the following:
+
+```
+DISCORD_TOKEN=your_discord_bot_token_here
+CHANNEL_ID=your_discord_channel_id_here
+PORT=3000
+SHARED_SECRET=your_secure_secret_key_here
+```
+
+**How to get CHANNEL_ID:**
+
+* Enable Developer Mode in Discord (Settings → Advanced → Developer Mode)
+* Right-click the channel you want to use
+* Select **Copy ID**
+
+### 4. Run the Server
 
 ```bash
 npm start
 ```
 
-Server akan berjalan di `http://localhost:3000`
+The server will run at:
+
+```
+http://localhost:3000
+```
 
 ### 5. Setup Roblox Client
 
-1. Buka Roblox Studio
-2. Buka game yang ingin ditambahkan fitur Discord Bridge
-3. Buka file `roblox-client.lua` di project ini
-4. **Edit konfigurasi di bagian atas script:**
-   ```lua
-   local API_URL = "http://localhost:3000"  -- Ganti dengan URL/IP server kamu
-   local SHARED_SECRET = "dev-secret"  -- Harus sama dengan di .env
-   ```
-5. Copy seluruh isi `roblox-client.lua`
-6. Di Roblox Studio, buat **LocalScript** baru di:
-   - `StarterPlayer > StarterPlayerScripts` (untuk LocalScript)
-   - Atau `ServerScriptService` (untuk ServerScript)
-7. Paste script ke dalam LocalScript/ServerScript
-8. **PENTING**: Di Roblox Studio, enable HTTP requests:
-   - File > Game Settings > Security
-   - Enable "Allow HTTP Requests"
-   - Tambahkan domain server kamu ke whitelist
+1. Open **Roblox Studio**
+2. Open the game where you want to add the Discord Bridge feature
+3. Open the file `roblox-client.lua` in this project
+4. **Edit the configuration at the top of the script:**
 
-## 🌐 Deploy ke Production
+```lua
+local API_URL = "http://localhost:3000"  -- Replace with your server URL/IP
+local SHARED_SECRET = "dev-secret"      -- Must match the value in .env
+```
 
-Jika ingin deploy server agar bisa diakses dari luar:
+5. Copy the entire contents of `roblox-client.lua`
+6. In Roblox Studio, create a new **LocalScript** in:
+
+* `StarterPlayer > StarterPlayerScripts` (for LocalScript)
+* or `ServerScriptService` (for ServerScript)
+
+7. Paste the script into the LocalScript/ServerScript
+
+8. **IMPORTANT:** Enable HTTP requests in Roblox Studio:
+
+* File → Game Settings → Security
+* Enable **Allow HTTP Requests**
+* Add your server domain to the whitelist
+
+## 🌐 Deploy to Production
+
+If you want to deploy the server so it can be accessed externally:
 
 ### Option 1: Local Network (LAN)
-- Ganti `API_URL` di Roblox script dengan IP lokal kamu (misal: `http://192.168.1.100:3000`)
-- Pastikan firewall mengizinkan port 3000
+
+* Replace `API_URL` in the Roblox script with your local IP
+  example:
+
+```
+http://192.168.1.100:3000
+```
+
+* Make sure your firewall allows **port 3000**
 
 ### Option 2: Cloud Hosting
-- Deploy ke platform seperti:
-  - **Railway** (railway.app)
-  - **Render** (render.com)
-  - **Heroku** (heroku.com)
-  - **VPS** (DigitalOcean, AWS, dll)
-- Update `API_URL` di Roblox script dengan URL hosting kamu
-- Pastikan menggunakan HTTPS jika memungkinkan
 
-### Option 3: ngrok (Development/Testing)
+Deploy to platforms such as:
+
+* **Railway** (railway.app)
+* **Render** (render.com)
+* **Heroku** (heroku.com)
+* **VPS** (DigitalOcean, AWS, etc.)
+
+Then update `API_URL` in the Roblox script with your hosting URL.
+
+Use **HTTPS** in production if possible.
+
+### Option 3: ngrok (Development / Testing)
+
 ```bash
 ngrok http 3000
 ```
-Copy URL yang diberikan dan gunakan sebagai `API_URL` di Roblox script.
 
-## 📁 Struktur Project
+Copy the generated URL and use it as the `API_URL` in the Roblox script.
+
+## 📁 Project Structure
 
 ```
 rbx-discord-bridge/
-├── index.js              # Server utama (Express + Discord.js)
-├── roblox-client.lua     # Script untuk Roblox Studio
+├── index.js              # Main server (Express + Discord.js)
+├── roblox-client.lua     # Script for Roblox Studio
 ├── package.json
-├── .env                  # Konfigurasi (jangan commit!)
-├── .env.example          # Template konfigurasi
+├── .env                  # Configuration (do NOT commit!)
+├── .env.example          # Configuration template
 └── README.md
 ```
 
 ## 🔧 API Endpoints
 
 ### `POST /roblox/send`
-Mengirim pesan dari Roblox ke Discord.
 
-**Headers:**
+Send a message from Roblox to Discord.
+
+**Headers**
+
 ```
 x-shared-secret: your_secret_key
 ```
 
-**Body:**
+**Body**
+
 ```json
 {
   "name": "PlayerName",
-  "text": "Pesan dari Roblox"
+  "text": "Message from Roblox"
 }
 ```
 
 ### `GET /roblox/poll`
-Mendapatkan pesan baru dari Discord (polling).
 
-**Headers:**
+Retrieve new messages from Discord (polling).
+
+**Headers**
+
 ```
 x-shared-secret: your_secret_key
 ```
 
-**Query:**
+**Query**
+
 ```
-?since=123  // ID pesan terakhir yang sudah diterima
+?since=123
 ```
 
-**Response:**
+The ID of the last message already received.
+
+**Response**
+
 ```json
 {
   "ok": true,
@@ -158,7 +194,7 @@ x-shared-secret: your_secret_key
       "id": 1,
       "source": "discord",
       "name": "Username",
-      "text": "Pesan dari Discord",
+      "text": "Message from Discord",
       "ts": 1234567890
     }
   ],
@@ -168,28 +204,31 @@ x-shared-secret: your_secret_key
 
 ## ⚠️ Troubleshooting
 
-### Bot tidak menerima pesan
-- Pastikan **Message Content Intent** sudah di-enable di Discord Developer Portal
-- Pastikan bot sudah di-invite ke server dengan permission yang benar
-- Pastikan `CHANNEL_ID` sudah benar
+### Bot does not receive messages
 
-### Roblox tidak bisa connect ke server
-- Pastikan HTTP Requests sudah di-enable di Roblox Studio
-- Pastikan `API_URL` sudah benar
-- Pastikan server sudah running
-- Cek firewall/network settings
+* Ensure **Message Content Intent** is enabled in the Discord Developer Portal
+* Make sure the bot has been invited to the server with the correct permissions
+* Verify that `CHANNEL_ID` is correct
 
-### Pesan tidak muncul di Roblox
-- Pastikan `SHARED_SECRET` sama antara server dan client
-- Cek console server untuk error
-- Pastikan polling interval tidak terlalu cepat (minimal 1 detik)
+### Roblox cannot connect to the server
+
+* Make sure **HTTP Requests** are enabled in Roblox Studio
+* Verify that `API_URL` is correct
+* Ensure the server is running
+* Check firewall/network settings
+
+### Messages do not appear in Roblox
+
+* Ensure `SHARED_SECRET` is the same on both server and client
+* Check the server console for errors
+* Ensure the polling interval is not too fast (minimum 1 second)
 
 ## 🔒 Security Notes
 
-- **JANGAN** commit file `.env` ke git
-- Gunakan `SHARED_SECRET` yang kuat di production
-- Pertimbangkan rate limiting untuk mencegah spam
-- Gunakan HTTPS di production jika memungkinkan
+* **DO NOT** commit the `.env` file to git
+* Use a strong `SHARED_SECRET` in production
+* Consider adding rate limiting to prevent spam
+* Use **HTTPS** in production if possible
 
 ## 📝 License
 
@@ -197,4 +236,4 @@ ISC
 
 ## 🤝 Contributing
 
-Feel free to submit issues atau pull requests!
+Feel free to submit issues or pull requests!
