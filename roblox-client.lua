@@ -1,21 +1,21 @@
 -- Roblox Discord Bridge Client
--- Paste script ini ke dalam ServerScriptService atau tempat yang sesuai di Roblox Studio
+-- Paste this script into ServerScriptService (or an appropriate place) in Roblox Studio
 
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
--- ========== KONFIGURASI ==========
-local API_URL = "http://localhost:3000"  -- Ganti dengan URL server kamu (atau IP publik jika deploy)
-local SHARED_SECRET = "dev-secret"  -- Harus sama dengan yang di .env server
-local POLL_INTERVAL = 1  -- Poll setiap 1 detik untuk pesan baru dari Discord
+-- ========== CONFIGURATION ==========
+local API_URL = "http://localhost:3000"  -- Replace with your server URL (or public IP if deployed)
+local SHARED_SECRET = "dev-secret"  -- Must match the server .env
+local POLL_INTERVAL = 1  -- Poll every 1 second for new Discord messages
 
 -- ========== UI SETUP ==========
 local function createDiscordUI()
 	local player = Players.LocalPlayer
 	local playerGui = player:WaitForChild("PlayerGui")
 	
-	-- ScreenGui untuk UI Discord
+	-- ScreenGui for the Discord UI
 	local screenGui = Instance.new("ScreenGui")
 	screenGui.Name = "DiscordBridgeUI"
 	screenGui.ResetOnSpawn = false
@@ -30,7 +30,7 @@ local function createDiscordUI()
 	mainFrame.BorderSizePixel = 0
 	mainFrame.Parent = screenGui
 	
-	-- Corner untuk rounded edges
+	-- Rounded corners
 	local corner = Instance.new("UICorner")
 	corner.CornerRadius = UDim.new(0, 8)
 	corner.Parent = mainFrame
@@ -56,7 +56,7 @@ local function createDiscordUI()
 	titleText.TextXAlignment = Enum.TextXAlignment.Left
 	titleText.Parent = titleBar
 	
-	-- Scroll Frame untuk messages
+	-- Scroll frame for messages
 	local scrollFrame = Instance.new("ScrollingFrame")
 	scrollFrame.Name = "MessagesFrame"
 	scrollFrame.Size = UDim2.new(1, -20, 1, -100)
@@ -91,7 +91,7 @@ local function createDiscordUI()
 	textBox.Position = UDim2.new(0, 10, 0, 5)
 	textBox.BackgroundTransparency = 1
 	textBox.Text = ""
-	textBox.PlaceholderText = "Ketik pesan..."
+	textBox.PlaceholderText = "Type a message..."
 	textBox.TextColor3 = Color3.fromRGB(255, 255, 255)
 	textBox.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
 	textBox.TextSize = 14
@@ -106,7 +106,7 @@ local function createDiscordUI()
 	sendButton.Position = UDim2.new(1, -70, 0, 5)
 	sendButton.BackgroundColor3 = Color3.fromRGB(88, 101, 242)  -- Discord blurple
 	sendButton.BorderSizePixel = 0
-	sendButton.Text = "Kirim"
+	sendButton.Text = "Send"
 	sendButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 	sendButton.TextSize = 14
 	sendButton.Font = Enum.Font.GothamBold
@@ -119,7 +119,7 @@ local function createDiscordUI()
 	return screenGui, scrollFrame, textBox, sendButton
 end
 
--- ========== FUNGSI UTILITAS ==========
+-- ========== UTILITY FUNCTIONS ==========
 local function addMessageToUI(scrollFrame, source, name, text)
 	local messageFrame = Instance.new("Frame")
 	messageFrame.Name = "Message"
@@ -153,13 +153,13 @@ local function addMessageToUI(scrollFrame, source, name, text)
 	textLabel.TextWrapped = true
 	textLabel.Parent = messageFrame
 	
-	-- Auto-resize berdasarkan text
+	-- Auto-resize based on the message text
 	textLabel:GetPropertyChangedSignal("TextBounds"):Connect(function()
 		textLabel.Size = UDim2.new(1, 0, 0, textLabel.TextBounds.Y)
 		messageFrame.Size = UDim2.new(1, 0, 0, textLabel.TextBounds.Y + 22)
 	end)
 	
-	-- Scroll ke bawah
+	-- Scroll to bottom
 	wait(0.1)
 	scrollFrame.CanvasSize = UDim2.new(0, 0, 0, messagesList.AbsoluteContentSize.Y)
 	scrollFrame.CanvasPosition = Vector2.new(0, scrollFrame.AbsoluteCanvasSize.Y)
@@ -184,7 +184,7 @@ local function sendMessageToDiscord(name, text)
 	end)
 	
 	if not success then
-		warn("Error mengirim pesan:", result)
+		warn("Error sending message:", result)
 		return false
 	end
 	
@@ -236,7 +236,7 @@ sendButton.MouseButton1Click:Connect(function()
 		if sendMessageToDiscord(playerName, text) then
 			textBox.Text = ""
 		else
-			warn("Gagal mengirim pesan")
+			warn("Failed to send message")
 		end
 	end
 end)

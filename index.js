@@ -35,7 +35,7 @@ const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent, // WAJIB kalau mau baca isi pesan
+    GatewayIntentBits.MessageContent, // Required to read message content
   ],
   partials: [Partials.Channel],
 });
