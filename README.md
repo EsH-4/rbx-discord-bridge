@@ -9,6 +9,10 @@ Two-way bridge between a Roblox game and a Discord server. Players in Roblox can
 - ✅ **Real-time**: Polling-based message synchronization
 - ✅ **Modern UI**: Discord-inspired interface inside Roblox
 
+## 📸 Preview
+
+<img src="assets/Discord.png" width="300">
+
 ## 📋 Prerequisites
 
 1. **Node.js** (v16 or newer)
