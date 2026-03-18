@@ -197,7 +197,7 @@ x-shared-secret: your_secret_key
 
 ## 📝 License
 
-ISC
+-
 
 ## 🤝 Contributing
 
